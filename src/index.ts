@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.routes";
+import connectToMongo from "./db/connectMongo";
 
 dotenv.config();
 
@@ -17,5 +18,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
+  connectToMongo();
   console.log(`Server running on port http://localhost:${PORT}/`);
 });
