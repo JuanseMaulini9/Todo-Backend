@@ -1,8 +1,16 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-
+import { UserInterface } from "./types";
 import authRoutes from "./routes/auth.routes";
 import connectToMongo from "./db/connectMongo";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: UserInterface;
+    }
+  }
+}
 
 dotenv.config();
 
