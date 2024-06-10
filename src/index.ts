@@ -2,7 +2,9 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { UserInterface } from "./types";
 import authRoutes from "./routes/auth.routes";
+import todoRoutes from "./routes/todo.routes";
 import connectToMongo from "./db/connectMongo";
+import cookieParser from "cookie-parser";
 
 declare global {
   namespace Express {
@@ -12,18 +14,17 @@ declare global {
   }
 }
 
-dotenv.config();
-
 const app = express();
+
+dotenv.config();
+app.use(cookieParser());
+
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("PROBANDO actualizacion");
-});
+app.use("/api/todo", todoRoutes);
 
 app.listen(PORT, () => {
   connectToMongo();
