@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import { UserInterface } from "./types";
 import authRoutes from "./routes/auth.routes";
@@ -18,6 +19,12 @@ const app = express();
 
 dotenv.config();
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 const PORT = process.env.PORT || 8080;
 
