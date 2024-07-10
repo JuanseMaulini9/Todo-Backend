@@ -1,5 +1,5 @@
 import { Request, Response, response } from "express";
-import Todo from "../schemas/todo.schema";
+import Todo from "../schemas/tasks.schema";
 
 export const getTodo = async (req: Request, res: Response) => {
   try {

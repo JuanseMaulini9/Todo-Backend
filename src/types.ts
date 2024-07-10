@@ -6,12 +6,31 @@ export interface UserInterface {
   password: string;
 }
 
-export interface TodoInterface {
+export interface BoardInterface {
+  _id: Types.ObjectId;
+  nameBoard: string;
+  user: Types.ObjectId;
+  tasks: [Types.ObjectId];
+}
+
+export enum StateValue {
+  todo = "To do",
+  inprogress = "In progress",
+  done = "Done",
+}
+
+export interface TaskChecked {
+  value: boolean;
+  name: string;
+}
+
+export interface TasksInterface {
+  _id: Types.ObjectId;
   title: string;
-  content?: string;
-  expires?: Date;
-  value?: string;
-  userId: Types.ObjectId;
+  description: string;
+  expires: Date;
+  taskList: TaskChecked[];
+  stateValue: StateValue;
 }
 
 export interface TokenPayload {
