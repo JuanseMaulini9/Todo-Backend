@@ -1,16 +1,22 @@
 import { UserInterface } from "../types";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
+  boards: [
+    {
+      type: Types.ObjectId,
+      ref: "Board",
+    },
+  ],
 });
 
 const User = mongoose.model<UserInterface>("User", userSchema);

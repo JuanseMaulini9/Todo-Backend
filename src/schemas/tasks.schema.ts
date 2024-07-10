@@ -33,5 +33,5 @@ const TasksSchema = new mongoose.Schema({
   },
 });
 
-const Tasks = mongoose.model<TasksInterface>("Tassks", TasksSchema);
+const Tasks = mongoose.model<TasksInterface>("Tasks", TasksSchema);
 export default Tasks;

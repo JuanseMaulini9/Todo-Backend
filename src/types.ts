@@ -4,6 +4,7 @@ export interface UserInterface {
   _id: Types.ObjectId;
   username: string;
   password: string;
+  boards: [Types.ObjectId];
 }
 
 export interface BoardInterface {
