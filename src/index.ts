@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { UserInterface } from "./types";
 import authRoutes from "./routes/auth.routes";
 import boardRoutes from "./routes/board.routes";
-import todoRoutes from "./routes/todo.routes";
+import todoRoutes from "./routes/task.routes";
 import connectToMongo from "./db/connectMongo";
 import cookieParser from "cookie-parser";
 
@@ -33,7 +33,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/board", boardRoutes);
-app.use("/api/todo", todoRoutes);
+app.use("/api/task", todoRoutes);
 
 app.listen(PORT, () => {
   connectToMongo();
