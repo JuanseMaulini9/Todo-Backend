@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import Board from "../schemas/board.schema";
+import User from "../schemas/user.schema";
 
 export const getBoards = async (req: Request, res: Response) => {
   const userLogged = req.user;
@@ -12,7 +13,6 @@ export const getBoards = async (req: Request, res: Response) => {
       "user",
       "username"
     );
-    console.log(userBoards);
     if (userBoards) {
       return res.status(200).json({ userBoards });
     } else
@@ -39,6 +39,10 @@ export const createBoard = async (req: Request, res: Response) => {
     });
 
     await newBoard.save();
+
+    await User.findByIdAndUpdate(userLogged._id, {
+      $push: { boards: newBoard._id },
+    });
 
     res
       .status(200)
@@ -83,6 +87,12 @@ export const deleteBoard = async (req: Request, res: Response) => {
     const { boardId } = req.params;
 
     const boardDelete = await Board.findByIdAndDelete(boardId);
+    if (!boardDelete) {
+      return res.status(404).json({ message: "Board no encontrado" });
+    }
+    await User.findByIdAndUpdate(boardDelete.user, {
+      $pull: { boards: boardId },
+    });
 
     res.status(200).json({ message: "board deleted", boardDelete });
   } catch (error) {

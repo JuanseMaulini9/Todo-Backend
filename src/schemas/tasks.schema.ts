@@ -1,5 +1,5 @@
 import { TasksInterface, TaskChecked, StateValue } from "../types";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 const TaskCheckedSchema = new mongoose.Schema<TaskChecked>({
   value: {
@@ -30,6 +30,11 @@ const TasksSchema = new mongoose.Schema({
     type: String,
     enum: Object.values(StateValue),
     default: "To do",
+  },
+  boardId: {
+    type: Types.ObjectId,
+    required: true,
+    ref: "Board",
   },
 });
 

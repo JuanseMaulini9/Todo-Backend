@@ -32,6 +32,7 @@ export interface TasksInterface {
   expires: Date;
   taskList: TaskChecked[];
   stateValue: StateValue;
+  boardId: Types.ObjectId;
 }
 
 export interface TokenPayload {

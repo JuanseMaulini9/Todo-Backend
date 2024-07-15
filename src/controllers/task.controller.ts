@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Task from "../schemas/tasks.schema";
+import Board from "../schemas/board.schema";
 
 export const getTask = async (req: Request, res: Response) => {
   try {
@@ -15,33 +16,40 @@ export const getTask = async (req: Request, res: Response) => {
 export const createTask = async (req: Request, res: Response) => {
   try {
     const userId = req.user._id;
-    const { title, description, expires, stateValue, taskList } = req.body;
+    const { title, description, expires, stateValue, taskList, boardId } =
+      req.body;
     const newTask = new Task({
       title,
       description,
       expires,
       stateValue,
       taskList,
+      boardId,
     });
 
-    const taskSaved = await newTask.save();
-    if (taskSaved)
-      return res.status(201).json({ message: `task ${title} created` });
-    else throw new Error();
+    await newTask.save();
+    await Board.findByIdAndUpdate(boardId, {
+      $push: { tasks: newTask._id },
+    });
+    return res.status(201).json({ message: `task ${title} created` });
   } catch (error) {
     if (error instanceof Error) {
-      res.send(error);
+      res.status(500).json(error);
+      console.log("error");
     }
   }
 };
 export const deleteTask = async (req: Request, res: Response) => {
   try {
-    const { _id } = req.body;
-    if (typeof _id !== "string") {
+    const { taskId, boardId } = req.body;
+    if (typeof taskId !== "string") {
       return res.status(400).send("Error type");
     }
-    await Task.findOneAndDelete({ _id });
-    res.status(201).send("Task ok");
+    await Task.findOneAndDelete({ taskId });
+    await Board.findByIdAndUpdate(boardId, {
+      $pull: { tasks: taskId },
+    });
+    res.status(201).send("Delete ok");
   } catch (error) {
     if (error instanceof Error) {
       res.send(error);
