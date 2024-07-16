@@ -9,14 +9,51 @@ export const getBoards = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "No hay usuario loggeado" });
   }
   try {
-    const userBoards = await Board.find({ user: userLogged._id }).populate(
-      "user",
-      "username"
-    );
+    const userBoards = await Board.find({ user: userLogged._id })
+      .populate("user", "username")
+      .populate("tasks");
     if (userBoards) {
       return res.status(200).json({ userBoards });
     } else
       return res.status(404).json({ message: "No se encontraron tableros" });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: "error" });
+    }
+  }
+};
+
+export const getBoardById = async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+
+  try {
+    const board = await Board.findById(boardId)
+      .populate("user", "username")
+      .populate("tasks");
+
+    if (board) {
+      return res.status(200).json({ board });
+    } else
+      return res.status(404).json({ message: "No se encontraron tableros" });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: "error" });
+    }
+  }
+};
+
+export const getBoardsName = async (req: Request, res: Response) => {
+  const userLogged = req.user;
+
+  try {
+    const boards = await Board.find({ user: userLogged._id }).select(
+      "_id nameBoard"
+    );
+
+    console.log(boards);
+    if (boards) {
+      return res.status(200).json({ boards });
+    } else throw new Error("boards no encotrados");
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: "error" });
@@ -44,9 +81,9 @@ export const createBoard = async (req: Request, res: Response) => {
       $push: { boards: newBoard._id },
     });
 
-    res
-      .status(200)
-      .json({ message: `tablero: ${newBoard.nameBoard} creado exitosamente` });
+    const populatedBoard = await newBoard.populate("user", "username");
+
+    res.status(200).json(populatedBoard);
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: error });
