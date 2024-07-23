@@ -15,9 +15,9 @@ export interface BoardInterface {
 }
 
 export enum StateValue {
-  todo = "To do",
-  inprogress = "In progress",
-  done = "Done",
+  todo = "to do",
+  inprogress = "in progress",
+  done = "done",
 }
 
 export interface TaskChecked {

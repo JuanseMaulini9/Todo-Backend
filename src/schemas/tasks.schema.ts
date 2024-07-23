@@ -19,9 +19,11 @@ const TasksSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    default: "",
   },
   expires: {
     type: Date,
+    default: new Date(),
   },
   taskList: {
     type: [TaskCheckedSchema],

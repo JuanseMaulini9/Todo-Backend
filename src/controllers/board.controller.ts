@@ -49,8 +49,6 @@ export const getBoardsName = async (req: Request, res: Response) => {
     const boards = await Board.find({ user: userLogged._id }).select(
       "_id nameBoard"
     );
-
-    console.log(boards);
     if (boards) {
       return res.status(200).json({ boards });
     } else throw new Error("boards no encotrados");
@@ -81,9 +79,12 @@ export const createBoard = async (req: Request, res: Response) => {
       $push: { boards: newBoard._id },
     });
 
-    const populatedBoard = await newBoard.populate("user", "username");
+    const newBoardResponse = {
+      _id: newBoard._id,
+      nameBoard: newBoard.nameBoard,
+    };
 
-    res.status(200).json(populatedBoard);
+    res.status(200).json(newBoardResponse);
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: error });

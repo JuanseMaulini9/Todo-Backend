@@ -15,15 +15,10 @@ export const getTask = async (req: Request, res: Response) => {
 };
 export const createTask = async (req: Request, res: Response) => {
   try {
-    const userId = req.user._id;
-    const { title, description, expires, stateValue, taskList, boardId } =
-      req.body;
+    const { stateValue, boardId } = req.body;
     const newTask = new Task({
-      title,
-      description,
-      expires,
+      title: "New task",
       stateValue,
-      taskList,
       boardId,
     });
 
@@ -31,7 +26,7 @@ export const createTask = async (req: Request, res: Response) => {
     await Board.findByIdAndUpdate(boardId, {
       $push: { tasks: newTask._id },
     });
-    return res.status(201).json({ message: `task ${title} created` });
+    return res.status(201).json({ message: `task created`, task: newTask });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json(error);
@@ -41,7 +36,7 @@ export const createTask = async (req: Request, res: Response) => {
 };
 export const deleteTask = async (req: Request, res: Response) => {
   try {
-    const { taskId, boardId } = req.body;
+    const { boardId, taskId } = req.body;
     if (typeof taskId !== "string") {
       return res.status(400).send("Error type");
     }
@@ -70,7 +65,7 @@ export const editTask = async (req: Request, res: Response) => {
       },
       { new: true }
     );
-    res.status(200).json({ message: `Task actualizada: ${updatedTask}` });
+    res.status(200).json({ update: updatedTask });
   } catch (error) {
     if (error instanceof Error) {
       res.send(error);
