@@ -21,6 +21,7 @@ export enum StateValue {
 }
 
 export interface TaskChecked {
+  _id: Types.ObjectId;
   value: boolean;
   name: string;
 }
