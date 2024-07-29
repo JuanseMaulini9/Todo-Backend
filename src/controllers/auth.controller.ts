@@ -24,7 +24,7 @@ export const signup = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "el usuario ya existe" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 9);
     const newUser = new User({
       username,
       password: hashedPassword,
