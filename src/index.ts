@@ -19,10 +19,13 @@ declare global {
 const app = express();
 
 dotenv.config();
+
+const CLIENTE = process.env.CLIENTE;
+
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: CLIENTE?.toString(),
     credentials: true,
   })
 );
